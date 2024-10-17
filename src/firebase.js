@@ -1,4 +1,7 @@
-import firebase from "firebase";
+import firebase from "firebase/app"; // Import the firebase app
+import "firebase/auth"; // Import Firebase Authentication
+import "firebase/firestore"; // Import Cloud Firestore
+import "firebase/storage"; // Import Firebase Storage
 
 const firebaseConfig = {
   apiKey: "AIzaSyAwC3qO_f1vXK2C7KdmbXt3XIYMk7qeREY",
@@ -13,8 +16,10 @@ const firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig);
 const auth = app.auth();
 const db = app.firestore();
+const storage = app.storage(); // Initialize Firebase Storage
 const googleProvider = new firebase.auth.GoogleAuthProvider();
-// Sign in and check or create account in firestore
+
+// Sign in and check or create account in Firestore
 const signInWithGoogle = async () => {
   try {
     const response = await auth.signInWithPopup(googleProvider);
@@ -36,8 +41,9 @@ const signInWithGoogle = async () => {
     alert(err.message);
   }
 };
+
 const logout = () => {
   auth.signOut();
 };
 
-export { app, auth, db, signInWithGoogle, logout };
+export { app, auth, db, storage, signInWithGoogle, logout }; // Export storage

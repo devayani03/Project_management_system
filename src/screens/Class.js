@@ -1,55 +1,20 @@
-import { IconButton } from "@material-ui/core";
-import { SendOutlined } from "@material-ui/icons";
-import moment from "moment";
-import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useHistory, useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import Announcement from "../components/Announcement";
+import Assignments from "../components/Assignments";
 import { auth, db } from "../firebase";
-import "./Class.css";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useParams, useHistory } from "react-router-dom";
+import moment from "moment";
+import { IconButton, TextField, Button } from "@material-ui/core";
+import { SendOutlined } from "@material-ui/icons";
 
 function Class() {
   const [classData, setClassData] = useState({});
   const [announcementContent, setAnnouncementContent] = useState("");
   const [posts, setPosts] = useState([]);
-  const [user, loading, error] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
   const { id } = useParams();
   const history = useHistory();
-
-  /*
-    PLAN: Create a snapshot listener and fill in the data into classData, 
-    and then map through it during render
-  */
-
-  useEffect(() => {
-    // reverse the array
-    let reversedArray = classData?.posts?.reverse();
-    setPosts(reversedArray);
-  }, [classData]);
-
-  const createPost = async () => {
-    try {
-      const myClassRef = await db.collection("classes").doc(id).get();
-      const myClassData = await myClassRef.data();
-      console.log(myClassData);
-      let tempPosts = myClassData.posts;
-      tempPosts.push({
-        authorId: user.uid,
-        content: announcementContent,
-        date: moment().format("MMM Do YY"),
-        image: user.photoURL,
-        name: user.displayName,
-      });
-      myClassRef.ref.update({
-        posts: tempPosts,
-      });
-    } catch (error) {
-      console.error(error);
-      alert(`There was an error posting the announcement, please try again!`);
-    }
-  };
 
   useEffect(() => {
     db.collection("classes")
@@ -57,35 +22,53 @@ function Class() {
       .onSnapshot((snapshot) => {
         const data = snapshot.data();
         if (!data) history.replace("/");
-        console.log(data);
         setClassData(data);
+        setPosts(data?.posts?.reverse() || []);
       });
-  }, []);
+  }, [id, history]);
 
-  useEffect(() => {
-    if (loading) return;
-    if (!user) history.replace("/");
-  }, [loading, user]);
+  const createPost = async () => {
+    try {
+      const classRef = db.collection("classes").doc(id);
+      const newPosts = [
+        ...classData.posts,
+        {
+          authorId: user.uid,
+          content: announcementContent,
+          date: moment().format("MMM Do YY"),
+          image: user.photoURL,
+          name: user.displayName,
+        },
+      ];
+      await classRef.update({ posts: newPosts });
+      setAnnouncementContent("");
+    } catch (error) {
+      console.error("Error posting announcement", error);
+    }
+  };
 
   return (
     <div className="class">
       <div className="class__nameBox">
         <div className="class__name">{classData?.name}</div>
       </div>
+
+      {/* Announcement Section */}
       <div className="class__announce">
-        <img src={user?.photoURL} alt="My image" />
-        <input
-          type="text"
+        <img src={user?.photoURL} alt="Profile" />
+        <TextField
           value={announcementContent}
           onChange={(e) => setAnnouncementContent(e.target.value)}
           placeholder="Announce something to your class"
+          fullWidth
         />
         <IconButton onClick={createPost}>
           <SendOutlined />
         </IconButton>
       </div>
-      {posts?.map((post) => (
+      {posts.map((post, index) => (
         <Announcement
+          key={index}
           authorId={post.authorId}
           content={post.content}
           date={post.date}
@@ -93,6 +76,9 @@ function Class() {
           name={post.name}
         />
       ))}
+
+      {/* Pass classData as a prop to Assignments */}
+      <Assignments classData={classData} user={user} />
     </div>
   );
 }
