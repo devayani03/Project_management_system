@@ -1,5 +1,5 @@
 import { Avatar, IconButton, MenuItem, Menu } from "@material-ui/core";
-import { Add, Apps, Menu as MenuIcon } from "@material-ui/icons";
+import { Add, Apps } from "@material-ui/icons";
 import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRecoilState } from "recoil";
@@ -23,13 +23,24 @@ function Navbar() {
     setAnchorEl(null);
   };
 
+  const openMeet = () => {
+    // Add logic to open Meet feature
+    alert("Opening Meet...");
+    handleClose();
+  };
+
+  const openTextEditor = () => {
+    // Add logic to open Text Editor
+    alert("Opening Text Editor...");
+    handleClose();
+  };
+
   return (
     <>
       <CreateClass />
       <JoinClass />
       <nav className="navbar">
         <div className="navbar__left">
-          
           <span>Project Tracker</span>
         </div>
         <div className="navbar__right">
@@ -69,6 +80,10 @@ function Navbar() {
             >
               Join group
             </MenuItem>
+            <MenuItem onClick={openMeet}>Meet</MenuItem>{" "}
+            {/* New MenuItem for Meet */}
+            <MenuItem onClick={openTextEditor}>Text Editor</MenuItem>{" "}
+            {/* New MenuItem for Text Editor */}
           </Menu>
         </div>
       </nav>
