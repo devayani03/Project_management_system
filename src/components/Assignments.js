@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Button, TextField } from "@material-ui/core";
 import { db, storage } from "../firebase"; // Ensure you have firebase storage for file uploads
 import { useParams } from "react-router-dom";
+import "./Assignment.css";
 
 function Assignments({ classData, user }) {
   const [assignmentContent, setAssignmentContent] = useState("");

@@ -1,0 +1,146 @@
+.assignments {
+    width: 100%;
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0px 1px 6px -2px rgba(0, 0, 0, 0.2);
+}
+
+/* Assignment creation section */
+.assignment-create {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 1px 6px -2px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.assignment-create .MuiButton-root {
+    align-self: flex-end;
+    background-color: #0b24c8;
+    color: white;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.assignment-create .MuiButton-root:hover {
+    background-color: #0939a3;
+}
+
+/* Assignment list section */
+.assignments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.assignment-item {
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 1px 6px -2px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.assignment-item p {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.assignment-item small {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Assignment submission section for students */
+.submit-assignment {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.submit-assignment input[type="file"] {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.submit-assignment .MuiButton-root {
+    background-color: #28a745;
+    color: white;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.submit-assignment .MuiButton-root:hover {
+    background-color: #218838;
+}
+
+/* Submissions section for creator to view */
+.assignment-submissions {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
+}
+
+.assignment-submissions h4 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #0b24c8;
+}
+
+.submission-item {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.submission-item p {
+    font-size: 16px;
+    color: #333;
+}
+
+.submission-item a {
+    color: #0b24c8;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.submission-item a:hover {
+    color: #0939a3;
+    text-decoration: none;
+}
+
+/* Responsive styling for mobile screens */
+@media (max-width: 768px) {
+    .assignments {
+        padding: 15px;
+    }
+
+    .assignment-create,
+    .assignment-item {
+        padding: 15px;
+    }
+
+    .assignment-item p {
+        font-size: 16px;
+    }
+
+    .submit-assignment input[type="file"] {
+        padding: 8px;
+    }
+
+    .submission-item p {
+        font-size: 14px;
+    }
+}

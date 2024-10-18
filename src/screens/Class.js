@@ -7,6 +7,7 @@ import { useParams, useHistory } from "react-router-dom";
 import moment from "moment";
 import { IconButton, TextField, Button } from "@material-ui/core";
 import { SendOutlined } from "@material-ui/icons";
+import "./Class.css";
 
 function Class() {
   const [classData, setClassData] = useState({});
