@@ -8,6 +8,7 @@ import { createDialogAtom, joinDialogAtom } from "../utils/atoms";
 import CreateClass from "./CreateClass";
 import JoinClass from "./JoinClass";
 import "./Navbar.css";
+import { useHistory } from "react-router-dom";
 
 function Navbar() {
   const [user, loading, error] = useAuthState(auth);
@@ -29,10 +30,11 @@ function Navbar() {
     handleClose();
   };
 
+  const history = useHistory();
+
   const openTextEditor = () => {
     // Add logic to open Text Editor
-    alert("Opening Text Editor...");
-    handleClose();
+    history.push("/editor");
   };
 
   return (

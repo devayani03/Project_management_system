@@ -5,6 +5,7 @@ import Dashboard from "./screens/Dashboard";
 import Navbar from "./components/Navbar";
 import Class from "./screens/Class";
 import ProjectTrackingDashboard from "./screens/Projecttracker";
+import TextEditor from "./components/TextEditor";
 
 function App() {
   return (
@@ -21,7 +22,11 @@ function App() {
 
           <Route exact path="/track">
             <Navbar />
-            <ProjectTrackingDashboard/>
+            <ProjectTrackingDashboard />
+          </Route>
+          <Route exact path="/editor">
+            <Navbar />
+            <TextEditor />
           </Route>
           <Route exact path="/class/:id">
             <Navbar />
