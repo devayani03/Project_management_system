@@ -25,9 +25,7 @@ function Navbar() {
   };
 
   const openMeet = () => {
-    // Add logic to open Meet feature
-    alert("Opening Meet...");
-    handleClose();
+    window.open("https://meet.google.com/", "_blank"); // Opens Google Meet in a new tab
   };
 
   const history = useHistory();
