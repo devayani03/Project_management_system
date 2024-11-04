@@ -1,5 +1,5 @@
-import { Avatar, IconButton, MenuItem, Menu } from "@material-ui/core";
-import { Add, Apps } from "@material-ui/icons";
+import { Avatar, IconButton, MenuItem, Menu, Button } from "@material-ui/core";
+import { Add, Apps, Home } from "@material-ui/icons";
 import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRecoilState } from "recoil";
@@ -24,17 +24,22 @@ function Navbar() {
     setAnchorEl(null);
   };
 
+  const openHome = () => {
+    history.push("/"); 
+  };
+
   const openMeet = () => {
-    // Add logic to open Meet feature
-    alert("Opening Meet...");
-    handleClose();
+    window.open("https://meet.google.com", "_blank");
   };
 
   const history = useHistory();
 
   const openTextEditor = () => {
-    // Add logic to open Text Editor
     history.push("/editor");
+  };
+
+  const openGoogleDocs = () => {
+    window.open("https://docs.google.com", "_blank");
   };
 
   return (
@@ -43,19 +48,28 @@ function Navbar() {
       <JoinClass />
       <nav className="navbar">
         <div className="navbar__left">
-          <span>Project Tracker</span>
+        <img
+          src="https://res.cloudinary.com/dyxnmjtrg/image/upload/v1729241256/book_logo_tvwpqi.png"
+          alt="logo
+          "
+          className="home__image"
+        />
+          <span>myProject</span>
         </div>
         <div className="navbar__right">
+        <IconButton onClick={openHome}> 
+            <Home /> 
+          </IconButton>
           <IconButton
             aria-controls="simple-menu"
             aria-haspopup="true"
             onClick={handleClick}
           >
-            <Add />
+          <Add />
           </IconButton>
-          <IconButton>
-            <Apps />
-          </IconButton>
+          <IconButton onClick={openMeet}>Meet</IconButton>
+          <IconButton onClick={openTextEditor}>Text Editor</IconButton>
+          <IconButton onClick={openGoogleDocs}>Google Docs</IconButton>
           <IconButton onClick={logout}>
             <Avatar src={user?.photoURL} />
           </IconButton>
@@ -82,10 +96,6 @@ function Navbar() {
             >
               Join group
             </MenuItem>
-            <MenuItem onClick={openMeet}>Meet</MenuItem>{" "}
-            {/* New MenuItem for Meet */}
-            <MenuItem onClick={openTextEditor}>Text Editor</MenuItem>{" "}
-            {/* New MenuItem for Text Editor */}
           </Menu>
         </div>
       </nav>
