@@ -56,7 +56,10 @@ function Class() {
 
       {/* Announcement Section */}
       <div className="class__announce">
-        <img src={user?.photoURL} alt="Profile" />
+        <img
+          src="https://res.cloudinary.com/dyxnmjtrg/image/upload/v1730742456/pfp-1_bsmdwc.png"
+          alt="Profile"
+        />
         <TextField
           value={announcementContent}
           onChange={(e) => setAnnouncementContent(e.target.value)}
