@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button, TextField } from "@material-ui/core";
 import { db } from "../firebase"; 
 import { useParams } from "react-router-dom";
-import Notification from "./Notification"; // Import Notification component
+import Notification from "./Notifications"; // Import Notification component
 import "./Assignment.css";
 
 

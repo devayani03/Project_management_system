@@ -2,7 +2,7 @@ import { IconButton } from "@material-ui/core";
 import { Menu, MoreVert } from "@material-ui/icons";
 import React, { useEffect, useState } from "react";
 import "./Announcement.css";
-import Notification from "./Notification"; // Import Notification component
+import Notification from "./Notifications"; // Import Notification component
 
 function Announcement({ image, name, date, content, authorId }) {
   const [notificationOpen, setNotificationOpen] = useState(false); // State for notification

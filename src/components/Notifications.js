@@ -1,5 +1,5 @@
 import React from "react";
-import "./Notification.css"; // Make sure to create this CSS file
+import "./Notifications.css"; // Make sure to create this CSS file
 
 function Notification({ message, isVisible, onClose }) {
   if (!isVisible) return null;

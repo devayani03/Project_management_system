@@ -12,7 +12,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useRecoilState } from "recoil";
 import { auth, db } from "../firebase";
 import { joinDialogAtom } from "../utils/atoms";
-import Notification from "./Notification"; // Import the Notification component
+import Notification from "./Notifications"; // Import the Notification component
 
 function JoinClass() {
   const [open, setOpen] = useRecoilState(joinDialogAtom);

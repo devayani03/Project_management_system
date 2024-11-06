@@ -12,7 +12,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useRecoilState } from "recoil";
 import { auth, db } from "../firebase";
 import { createDialogAtom } from "../utils/atoms";
-import Notification from "./Notification"; // Import the Notification component
+import Notification from "./Notifications"; // Import the Notification component
 
 function CreateClass() {
   const [user] = useAuthState(auth);
