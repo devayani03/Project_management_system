@@ -5,16 +5,16 @@ import {
   CircularProgress,
   LinearProgress,
 } from "@material-ui/core";
-import { db, storage } from "../firebase"; // Ensure Firebase Storage is configured for file uploads
+import axios from "axios"; // Import Axios to make HTTP requests
 import { useParams } from "react-router-dom";
 import "./Assignment.css";
-
+import { db } from "../firebase";
 function Assignments({ classData, user }) {
   const [assignmentContent, setAssignmentContent] = useState("");
   const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [selectedFile, setSelectedFile] = useState(null); // Store selected file
+  const [selectedFile, setSelectedFile] = useState(null);
   const { id } = useParams();
 
   useEffect(() => {
@@ -35,7 +35,6 @@ function Assignments({ classData, user }) {
         }
       );
 
-    // Cleanup listener on component unmount
     return () => unsubscribe();
   }, [id]);
 
@@ -48,7 +47,6 @@ function Assignments({ classData, user }) {
     setLoading(true);
     try {
       const classRef = db.collection("classes").doc(id);
-
       const newAssignments = [
         ...(classData.assignments || []),
         {
@@ -85,14 +83,18 @@ function Assignments({ classData, user }) {
         return;
       }
 
-      // Upload to Firebase Storage
-      const storageRef = storage.ref();
-      const fileRef = storageRef.child(
-        `assignments/${id}/${assignmentId}/${user.uid}-${selectedFile.name}`
-      );
-      await fileRef.put(selectedFile);
+      // Prepare the form data to upload to Cloudinary
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+      formData.append("upload_preset", "pdf_upload"); // Cloudinary upload preset
 
-      const fileUrl = await fileRef.getDownloadURL();
+      // Upload file to Cloudinary
+      const response = await axios.post(
+        `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/upload`,
+        formData
+      );
+
+      const fileUrl = response.data.secure_url; // Get file URL from Cloudinary response
 
       // Update assignment's submissions in Firestore
       const classRef = db.collection("classes").doc(id);
@@ -138,7 +140,6 @@ function Assignments({ classData, user }) {
 
   return (
     <div className="assignments">
-      {/* Display errors if any */}
       {error && <p className="error-message">{error}</p>}
 
       {/* Only allow the class creator to post assignments */}
