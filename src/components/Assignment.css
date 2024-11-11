@@ -7,7 +7,6 @@
     box-shadow: 0px 1px 6px -2px rgba(0, 0, 0, 0.2);
 }
 
-/* Assignment creation section */
 .assignment-create {
     display: flex;
     flex-direction: column;
@@ -31,11 +30,11 @@
     background-color: #0939a3;
 }
 
-/* Assignment list section */
 .assignments-list {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    box-shadow: #0939a3;
 }
 
 .assignment-item {
@@ -43,23 +42,50 @@
     background-color: white;
     border-radius: 10px;
     box-shadow: 0px 1px 6px -2px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
 }
 
-.assignment-item p {
+.assignment-content {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 15px;
+}
+
+.left-section {
+    width: 68%;
+border: 2px solid #ddd;
+    /* Adjust color to your preference */
+    padding: 10px;
+    /* Adds padding to create space between text and border */
+    border-radius: 8px;
+    /* Optional: rounds the corners */
+    background-color: #f9f9f9;
+}
+
+.left-section p {
     font-size: 18px;
     font-weight: bold;
     color: #333;
 }
 
-.assignment-item small {
+.right-section {
+    width: 30%;
+    text-align: right;
     font-size: 14px;
     color: #666;
+    border: 2px solid #ddd;
+        /* Adjust color to your preference */
+        padding: 10px;
+        /* Adds padding to create space between text and border */
+        border-radius: 8px;
+        /* Optional: rounds the corners */
+        background-color: #f9f9f9;
 }
 
-/* Assignment submission section for students */
+.progress-bar {
+    margin-top: 10px;
+}
+
 .submit-assignment {
     margin-top: 10px;
     display: flex;
@@ -85,62 +111,39 @@
     background-color: #218838;
 }
 
-/* Submissions section for creator to view */
 .assignment-submissions {
     margin-top: 20px;
-    padding-top: 15px;
-    border-top: 1px solid #ddd;
-}
-
-.assignment-submissions h4 {
-    font-size: 20px;
-    font-weight: bold;
-    color: #0b24c8;
+    background-color: #fafafa;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 1px 4px -1px rgba(0, 0, 0, 0.1);
 }
 
 .submission-item {
-    margin-top: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+    margin-bottom: 10px;
 }
 
-.submission-item p {
-    font-size: 16px;
-    color: #333;
-}
-
-.submission-item a {
-    color: #0b24c8;
-    text-decoration: underline;
+.error-message {
+    color: red;
     font-weight: bold;
+    margin-bottom: 10px;
 }
 
-.submission-item a:hover {
-    color: #0939a3;
-    text-decoration: none;
+.posted-info {
+    font-style: italic;
+    /* Make text italic */
+    font-size: 16px;
+    /* Adjust size as desired */
+    font-weight: bold;
+    /* Make text bold */
+    line-height: 1.5;
+    /* Add spacing between lines */
+    color: #333;
+    /* Optional: Customize text color */
 }
 
-/* Responsive styling for mobile screens */
-@media (max-width: 768px) {
-    .assignments {
-        padding: 15px;
-    }
-
-    .assignment-create,
-    .assignment-item {
-        padding: 15px;
-    }
-
-    .assignment-item p {
-        font-size: 16px;
-    }
-
-    .submit-assignment input[type="file"] {
-        padding: 8px;
-    }
-
-    .submission-item p {
-        font-size: 14px;
-    }
+.posted-by,
+.posted-date {
+    margin-bottom: 5px;
+    /* Space between lines */
 }

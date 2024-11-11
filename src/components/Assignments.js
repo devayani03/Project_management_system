@@ -5,10 +5,11 @@ import {
   CircularProgress,
   LinearProgress,
 } from "@material-ui/core";
-import axios from "axios"; // Import Axios to make HTTP requests
+import axios from "axios";
 import { useParams } from "react-router-dom";
 import "./Assignment.css";
 import { db } from "../firebase";
+
 function Assignments({ classData, user }) {
   const [assignmentContent, setAssignmentContent] = useState("");
   const [assignments, setAssignments] = useState([]);
@@ -52,7 +53,7 @@ function Assignments({ classData, user }) {
         {
           id: Date.now().toString(),
           content: assignmentContent,
-          date: new Date().toISOString(),
+          date: new Date().toISOString().split("T")[0],
           postedBy: user.displayName,
           creatorId: user.uid,
           submissions: [],
@@ -60,7 +61,7 @@ function Assignments({ classData, user }) {
       ];
 
       await classRef.update({ assignments: newAssignments });
-      setAssignmentContent(""); // Clear input after posting
+      setAssignmentContent("");
     } catch (error) {
       console.error("Error posting assignment", error);
       setError("Failed to post assignment");
@@ -77,26 +78,22 @@ function Assignments({ classData, user }) {
 
     setLoading(true);
     try {
-      // File type validation
       if (selectedFile.type !== "application/pdf") {
         alert("Only PDF files are allowed.");
         return;
       }
 
-      // Prepare the form data to upload to Cloudinary
       const formData = new FormData();
       formData.append("file", selectedFile);
-      formData.append("upload_preset", "pdf_upload"); // Cloudinary upload preset
+      formData.append("upload_preset", "pdf_upload");
 
-      // Upload file to Cloudinary
       const response = await axios.post(
         `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/upload`,
         formData
       );
 
-      const fileUrl = response.data.secure_url; // Get file URL from Cloudinary response
+      const fileUrl = response.data.secure_url;
 
-      // Update assignment's submissions in Firestore
       const classRef = db.collection("classes").doc(id);
       const classSnapshot = await classRef.get();
       const classData = classSnapshot.data();
@@ -121,7 +118,7 @@ function Assignments({ classData, user }) {
       });
 
       await classRef.update({ assignments: updatedAssignments });
-      setSelectedFile(null); // Clear file after submission
+      setSelectedFile(null);
     } catch (error) {
       console.error("Error submitting assignment", error);
       setError("Failed to submit assignment");
@@ -130,7 +127,6 @@ function Assignments({ classData, user }) {
     }
   };
 
-  // Helper function to calculate days passed
   const calculateDaysPassed = (dateString) => {
     const postedDate = new Date(dateString);
     const currentDate = new Date();
@@ -142,7 +138,6 @@ function Assignments({ classData, user }) {
     <div className="assignments">
       {error && <p className="error-message">{error}</p>}
 
-      {/* Only allow the class creator to post assignments */}
       {classData.creatorUid === user.uid && (
         <div className="assignment-create">
           <TextField
@@ -160,30 +155,40 @@ function Assignments({ classData, user }) {
 
       <div className="assignments-list">
         {loading ? (
-          <CircularProgress /> // Loading state for assignments
+          <CircularProgress />
         ) : (
           assignments.map((assignment) => {
             const daysPassed = calculateDaysPassed(assignment.date);
-            const maxDays = 7; // Define a period for assignments (e.g., 7 days)
+            const maxDays = 7;
             const progress = (daysPassed / maxDays) * 100;
 
             return (
               <div key={assignment.id} className="assignment-item">
-                <p>{assignment.content}</p>
-                <small>
-                  Posted by: {assignment.postedBy} on {assignment.date}
-                </small>
-
-                {/* Progress Bar for Days Passed */}
-                <div className="progress-bar">
-                  <LinearProgress
-                    variant="determinate"
-                    value={progress > 100 ? 100 : progress}
-                  />
-                  <p>{daysPassed} days passed since assignment was posted</p>
+                <div className="assignment-content">
+                  <div className="left-section">
+                    <p>{assignment.content}</p>
+                    <div className="progress-bar">
+                      <LinearProgress
+                        variant="determinate"
+                        value={progress > 100 ? 100 : progress}
+                      />
+                      <small style={{ fontStyle: "italic" }}>
+                        {daysPassed} days passed since assignment was posted
+                      </small>
+                    </div>
+                  </div>
+                  <div className="right-section">
+                    <div className="posted-info">
+                      <div className="posted-by">
+                        <strong>Posted by:</strong> {assignment.postedBy}
+                      </div>
+                      <div className="posted-date">
+                        <strong>Date:</strong> {assignment.date}
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                {/* Allow students (non-creators) to submit assignments */}
                 {user.uid !== classData.creatorUid && (
                   <div className="submit-assignment">
                     <input
@@ -202,7 +207,6 @@ function Assignments({ classData, user }) {
                   </div>
                 )}
 
-                {/* Only the class creator can view the submissions */}
                 {user.uid === classData.creatorUid && (
                   <div className="assignment-submissions">
                     <h4>Submissions</h4>
