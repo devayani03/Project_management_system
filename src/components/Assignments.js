@@ -12,7 +12,6 @@ import { db } from "../firebase";
 
 function Assignments({ classData, user }) {
   const [assignmentContent, setAssignmentContent] = useState("");
-  const [deadline, setDeadline] = useState(""); // Deadline state for manual input
   const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -46,9 +45,6 @@ function Assignments({ classData, user }) {
       return;
     }
 
-    const finalDeadline =
-      deadline || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(); // Use provided deadline or 7 days default
-
     setLoading(true);
     try {
       const classRef = db.collection("classes").doc(id);
@@ -58,7 +54,9 @@ function Assignments({ classData, user }) {
           id: Date.now().toString(),
           content: assignmentContent,
           date: new Date().toISOString().split("T")[0],
-          deadline: finalDeadline,
+          deadline: new Date(
+            Date.now() + 7 * 24 * 60 * 60 * 1000
+          ).toISOString(), // Default deadline: 7 days from now
           postedBy: user.displayName,
           creatorId: user.uid,
           submissions: [],
@@ -67,7 +65,6 @@ function Assignments({ classData, user }) {
 
       await classRef.update({ assignments: newAssignments });
       setAssignmentContent("");
-      setDeadline("");
     } catch (error) {
       console.error("Error posting assignment", error);
       setError("Failed to post assignment");
@@ -153,14 +150,6 @@ function Assignments({ classData, user }) {
             fullWidth
             disabled={loading}
           />
-          <TextField
-            label="Deadline"
-            type="date"
-            value={deadline}
-            onChange={(e) => setDeadline(e.target.value)}
-            InputLabelProps={{ shrink: true }}
-            disabled={loading}
-          />
           <Button onClick={createAssignment} color="primary" disabled={loading}>
             {loading ? <CircularProgress size={24} /> : "Post Assignment"}
           </Button>
@@ -230,8 +219,35 @@ function Assignments({ classData, user }) {
                 )}
 
                 {user.uid === classData.creatorUid && (
-                  <div className="posted-info">
-                    <strong>Posted by:</strong> {assignment.postedBy}
+                  <div className="assignment-submissions">
+                    <h4>Submissions</h4>
+                    {assignment.submissions?.length > 0 ? (
+                      assignment.submissions.map((submission, index) => (
+                        <div key={index} className="submission-item">
+                          <p style={{ fontStyle: "italic" }}>
+                            {submission.studentName} submitted on{" "}
+                            {new Intl.DateTimeFormat("en-US", {
+                              year: "numeric",
+                              month: "short",
+                              day: "2-digit",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              second: "2-digit",
+                              hour12: true,
+                            }).format(new Date(submission.submissionDate))}
+                          </p>
+                          <a
+                            href={submission.fileUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {submission.fileName}
+                          </a>
+                        </div>
+                      ))
+                    ) : (
+                      <p>No submissions yet.</p>
+                    )}
                   </div>
                 )}
               </div>
